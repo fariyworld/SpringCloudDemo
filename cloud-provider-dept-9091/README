@@ -1,0 +1,8 @@
+1. mybatis cache  https://www.cnblogs.com/li3807/p/7061850.html
+
+从数据库中加载的数据缓存到内存中，是很多应用程序为了提高性能而采取的一贯做法。
+MyBatis对通过映射的SELECT语句加载的查询结果提供了内建的缓存支持。
+默认情况下，启用一级缓存；即，如果你使用同一个SqlSession接口对象调用了相同的SELECT语句，
+则直接会从缓存中返回结果，而不是再查询一次数据库，但Session 被 Close 或者 Flush 后，缓存将被清除。
+MyBatis的二级缓存就是全局缓存，可以被所有SqlSession共享，
+MyBatis 包含一个非常强大的查询缓存特性，它可以非常方便地配置和定制。默认情况下是没有开启缓存的

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>SpringCloudDemo</artifactId>
+        <groupId>com.mace</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>cloud-provider-dept-9091</artifactId>
+    <packaging>jar</packaging>
+    <name>${project.artifactId}</name>
+    <description>cloud-provider-dept-9091子模块：提供 dept 服务, 端口: 9091</description>
+
+    <dependencies>
+        <!-- 引入自定义的 api 通用包, 即可调用 Dept 部门的实体类 -->
+        <dependency>
+            <groupId>com.mace</groupId>
+            <artifactId>cloud-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- 添加支持全栈式Web开发，包括Tomcat和spring webmvc所需库 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <!-- 添加 支持常规的测试依赖，包括JUnit、Hamcrest、Mockito以及spring-test模块 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- 热部署 -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>springloaded</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <!-- jetty 服务器 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jetty</artifactId>
+        </dependency>
+        <!-- junit 单元测试依赖-->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+        <!-- mysql 驱动包 -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+        <!-- druid数据库连接池 -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+            <version>${druid.starter.version}</version>
+        </dependency>
+        <!-- mybatis SpringBoot 依赖 -->
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+        </dependency>
+        <!-- logback 日志依赖 -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+        </dependency>
+         <!--配置文件密码加密-->
+        <dependency>
+            <groupId>com.github.ulisesbocchio</groupId>
+            <artifactId>jasypt-spring-boot-starter</artifactId>
+            <version>${jasypt.starter.version}</version>
+        </dependency>
+        <!-- Restful Api 文档说明 @EnableApi2Doc 文档访问地址：http://你的项目地址/api2doc/home.html -->
+        <dependency>
+            <groupId>com.github.terran4j</groupId>
+            <artifactId>terran4j-commons-api2doc</artifactId>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+
+        <resources>
+            <!-- 打包编译项目时 src下的xml也编译到target目录 -->
+            <!--<resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+            </resource>-->
+            <!-- 打包编译项目时 resources目录下的所有文件也编译到 target目录 -->
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.*</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
+
+
+</project>
