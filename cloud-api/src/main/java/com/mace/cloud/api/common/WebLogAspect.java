@@ -34,9 +34,14 @@ import java.util.Set;
 @Slf4j
 public class WebLogAspect {
 
-    private long START_TIME;
-    private long END_TIME;
-    private String requestId;
+    //解决 AOP 切面中的同步问题
+    ThreadLocal<Long> START_TIME = new ThreadLocal<Long>();
+    ThreadLocal<Long> END_TIME = new ThreadLocal<Long>();
+    ThreadLocal<String> requestId = new ThreadLocal<String>();
+
+//    private long START_TIME;
+//    private long END_TIME;
+//    private String requestId;
 
     // 定义在controller包和所有子包里的任意类的任意方法的执行
     @Pointcut("execution(* com.mace.cloud.controller..*.*(..))")
@@ -54,8 +59,10 @@ public class WebLogAspect {
     @Before(value = "ex()")
     public void doBefore(JoinPoint joinPoint){
 
-        requestId = StringHelper.getUUIDString();
-        START_TIME = System.currentTimeMillis();
+        requestId.set(StringHelper.getUUIDString());
+        START_TIME.set(System.currentTimeMillis());
+//        requestId = StringHelper.getUUIDString();
+//        START_TIME = System.currentTimeMillis();
 
         ServletRequestAttributes requestAttributes =
                 (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
@@ -120,15 +127,19 @@ public class WebLogAspect {
     @AfterThrowing(throwing = "ex", pointcut = "ex()")
     public void doAfterThrowing(JoinPoint joinPoint, Exception ex){
 
-        END_TIME = System.currentTimeMillis();
+        END_TIME.set(System.currentTimeMillis());
+//        END_TIME = System.currentTimeMillis();
         ServletRequestAttributes requestAttributes =
                 (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
 
         HttpServletRequest request = requestAttributes.getRequest();
 
-        request.setAttribute("requestId", requestId);
-        request.setAttribute("START_TIME", START_TIME);
-        request.setAttribute("END_TIME", END_TIME);
+        request.setAttribute("requestId", requestId.get());
+        request.setAttribute("START_TIME", START_TIME.get());
+        request.setAttribute("END_TIME", END_TIME.get());
+//        request.setAttribute("requestId", requestId);
+//        request.setAttribute("START_TIME", START_TIME);
+//        request.setAttribute("END_TIME", END_TIME);
 
         log.error("异常信息: {}",ex.getMessage());
         log.error("异常堆栈: {}",ex.getStackTrace());
@@ -139,15 +150,19 @@ public class WebLogAspect {
     @AfterReturning(returning = "result",pointcut = "ex()")
     public void doAfterReturning(Object result){
         // 处理完请求，返回内容
-        END_TIME = System.currentTimeMillis();
+        END_TIME.set(System.currentTimeMillis());
+//        END_TIME = System.currentTimeMillis();
 
         if(result instanceof RestPackResponse){
 
             RestPackResponse response = (RestPackResponse) result;
 
-            response.setRequestId(requestId);
-            response.setServerTime(new Date(START_TIME));
-            response.setSpendTime((END_TIME - START_TIME));
+            response.setRequestId(requestId.get());
+            response.setServerTime(new Date(START_TIME.get()));
+            response.setSpendTime((END_TIME.get() - START_TIME.get()));
+//            response.setRequestId(requestId);
+//            response.setServerTime(new Date(START_TIME));
+//            response.setSpendTime((END_TIME - START_TIME));
         }
 
         log.info("RESPONSE_TYPE : " + result.getClass());
