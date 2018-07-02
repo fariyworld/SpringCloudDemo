@@ -84,7 +84,9 @@ public @interface SystemControllerLog {
 
 3. aop 多切点表达式
 
+Pointcut可以有下列方式来定义或者通过 && || and or 的方式进行组合.
 
+! not 取反
 
 
 4. 切点表达式注意
