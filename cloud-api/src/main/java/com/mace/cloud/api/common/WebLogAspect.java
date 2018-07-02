@@ -44,19 +44,16 @@ public class WebLogAspect {
 //    private String requestId;
 
     // 定义在controller包和所有子包里的任意类的任意方法的执行
-    @Pointcut("execution(* com.mace.cloud.controller..*.*(..))")
-    public void ex() {
-    }
-
-    //execution(public * com.mace.cloud.*.controller..*.*(..))"
-
-    //Controller层切点 注解
     @Pointcut("@annotation(com.mace.cloud.api.annotation.SystemControllerLog)")
-    public void controllerAspect() {
+    public void pt() {
     }
+
+    //execution(* com.mace.cloud.*.controller..*.*(..))
+    //execution(public * com.mace.cloud.controller..*.*(..))
+    //Controller层切点 注解 @annotation(com.mace.cloud.api.annotation.SystemControllerLog)
 
     //前置通知
-    @Before(value = "ex()")
+    @Before(value = "pt()")
     public void doBefore(JoinPoint joinPoint){
 
         requestId.set(StringHelper.getUUIDString());
@@ -73,6 +70,7 @@ public class WebLogAspect {
         User user = (User) session.getAttribute(Constant.CURRENT_USER);
         String username = "";
         if( user != null)       username = user.getUsername();
+        username = username.equals("") ? "<>" : username;
 
         log.info("=========================请求 start======================================");
         log.info("requestId : " + requestId);
@@ -82,7 +80,7 @@ public class WebLogAspect {
         log.info("HTTP_METHOD : " + request.getMethod());
         log.info("CLASS_METHOD : " + joinPoint.getSignature().getDeclaringTypeName()
                 + "." + joinPoint.getSignature().getName());
-        log.info("方法描述 : " + getControllerMethodDescription(joinPoint));
+        log.info("METHOD_DESCRIPTION : " + getControllerMethodDescription(joinPoint));
 
         /*==========数据库日志=========*/
 //        Log log = SpringContextHolder.getBean("logxx");
@@ -119,12 +117,12 @@ public class WebLogAspect {
     }
 
     //后置通知
-    @After("ex()")
+    @After("pt()")
     public void doAfter(JoinPoint joinPoint){
     }
 
     //异常通知
-    @AfterThrowing(throwing = "ex", pointcut = "ex()")
+    @AfterThrowing(throwing = "ex", pointcut = "pt()")
     public void doAfterThrowing(JoinPoint joinPoint, Exception ex){
 
         END_TIME.set(System.currentTimeMillis());
@@ -147,7 +145,7 @@ public class WebLogAspect {
     }
 
     //返回通知
-    @AfterReturning(returning = "result",pointcut = "ex()")
+    @AfterReturning(returning = "result",pointcut = "pt()")
     public void doAfterReturning(Object result){
         // 处理完请求，返回内容
         END_TIME.set(System.currentTimeMillis());
@@ -172,7 +170,7 @@ public class WebLogAspect {
     }
 
     //环绕通知
-    //@Around(value = "ex()")
+    //@Around(value = "pt()")
     public Object doAround(ProceedingJoinPoint pjd){
         Object result =null;
 
@@ -236,6 +234,9 @@ public class WebLogAspect {
      * @throws Exception
      */
     private  String getControllerMethodDescription(JoinPoint joinPoint){
+
+        String description = "";
+
         String targetName = joinPoint.getTarget().getClass().getName();
         String methodName = joinPoint.getSignature().getName();
         Object[] arguments = joinPoint.getArgs();
@@ -245,13 +246,18 @@ public class WebLogAspect {
         } catch (ClassNotFoundException e) {
             log.error(e.getMessage());
         }
+
+        // 类上的注解
+        SystemControllerLog annotation = (SystemControllerLog) targetClass.getAnnotation(SystemControllerLog.class);
+        description = annotation.description() + "-";
+
+        // 方法上的注解
         Method[] methods = targetClass.getMethods();
-        String description = "";
         for (Method method : methods) {
             if (method.getName().equals(methodName)) {
                 Class[] clazzs = method.getParameterTypes();
                 if (clazzs.length == arguments.length) {
-                    description = method.getAnnotation(SystemControllerLog. class).description();
+                    description += method.getAnnotation(SystemControllerLog. class).description();
                     break;
                 }
             }

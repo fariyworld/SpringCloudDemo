@@ -22,12 +22,13 @@ import java.util.List;
 @RequestMapping("/dept")
 @Api2Doc(id = "dept", name = "部门接口")
 @ApiComment(seeClass = Dept.class)
-@SystemControllerLog
+@SystemControllerLog(description = "部门接口")
 public class DeptController {
 
     @Autowired
     private IDeptService iDeptService;
 
+    @SystemControllerLog(description = "查询所有部门信息")
     @ApiComment(value = "查询所有部门信息")
     @RequestMapping(value = "/findAll.do", name = "查询所有部门信息", method = RequestMethod.GET)
     public RestPackResponse<List<Dept>> findAll(){
