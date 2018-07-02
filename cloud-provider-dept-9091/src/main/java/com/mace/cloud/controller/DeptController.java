@@ -1,5 +1,6 @@
 package com.mace.cloud.controller;
 
+import com.mace.cloud.api.annotation.SystemControllerLog;
 import com.mace.cloud.api.common.RestPackResponse;
 import com.mace.cloud.api.entity.Dept;
 import com.mace.cloud.service.IDeptService;
@@ -21,6 +22,7 @@ import java.util.List;
 @RequestMapping("/dept")
 @Api2Doc(id = "dept", name = "部门接口")
 @ApiComment(seeClass = Dept.class)
+@SystemControllerLog
 public class DeptController {
 
     @Autowired

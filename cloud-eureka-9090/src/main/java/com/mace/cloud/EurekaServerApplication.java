@@ -1,4 +1,4 @@
-package com.mace.cloud.eureka;
+package com.mace.cloud;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

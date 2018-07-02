@@ -1,5 +1,7 @@
 package com.mace.cloud.api.common;
 
+import com.mace.cloud.api.annotation.SystemControllerLog;
+import com.mace.cloud.api.entity.User;
 import com.mace.cloud.api.util.StringHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -12,7 +14,9 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Method;
 import java.net.URLDecoder;
 import java.util.Arrays;
 import java.util.Date;
@@ -34,8 +38,16 @@ public class WebLogAspect {
     private long END_TIME;
     private String requestId;
 
-    @Pointcut("execution(* com.mace.cloud.controller.*.*(..))")
+    // 定义在controller包和所有子包里的任意类的任意方法的执行
+    @Pointcut("execution(* com.mace.cloud.controller..*.*(..))")
     public void ex() {
+    }
+
+    //execution(public * com.mace.cloud.*.controller..*.*(..))"
+
+    //Controller层切点 注解
+    @Pointcut("@annotation(com.mace.cloud.api.annotation.SystemControllerLog)")
+    public void controllerAspect() {
     }
 
     //前置通知
@@ -49,13 +61,35 @@ public class WebLogAspect {
                 (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
 
         HttpServletRequest request = requestAttributes.getRequest();
+        //读取session中的用户
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute(Constant.CURRENT_USER);
+        String username = "";
+        if( user != null)       username = user.getUsername();
+
         log.info("=========================请求 start======================================");
         log.info("requestId : " + requestId);
+        log.info("请求人 : " + username);
         log.info("IP : " + getClientIp(request));
         log.info("URL : "+ getRequestUrl(request));
         log.info("HTTP_METHOD : " + request.getMethod());
         log.info("CLASS_METHOD : " + joinPoint.getSignature().getDeclaringTypeName()
                 + "." + joinPoint.getSignature().getName());
+        log.info("方法描述 : " + getControllerMethodDescription(joinPoint));
+
+        /*==========数据库日志=========*/
+//        Log log = SpringContextHolder.getBean("logxx");
+//        log.setDescription(getServiceMthodDescription(joinPoint));
+//        log.setExceptionCode(e.getClass().getName());
+//        log.setType("1");
+//        log.setExceptionDetail(e.getMessage());
+//        log.setMethod((joinPoint.getTarget().getClass().getName() + "." + joinPoint.getSignature().getName() + "()"));
+//        log.setParams(params);
+//        log.setCreateBy(user);
+//        log.setCreateDate(DateUtil.getCurrentDate());
+//        log.setRequestIp(ip);
+        //保存数据库
+//        logService.add(log);
 
         Map<String, String[]> parameterMap = request.getParameterMap();
         if ( parameterMap.size() > 0 ){
@@ -177,5 +211,36 @@ public class WebLogAspect {
             e.printStackTrace();
         }
         return url;
+    }
+
+    /**
+     * 获取注解中对方法的描述信息 用于Controller层注解
+     *
+     * @param joinPoint 切点
+     * @return 方法描述
+     * @throws Exception
+     */
+    private  String getControllerMethodDescription(JoinPoint joinPoint){
+        String targetName = joinPoint.getTarget().getClass().getName();
+        String methodName = joinPoint.getSignature().getName();
+        Object[] arguments = joinPoint.getArgs();
+        Class targetClass = null;
+        try {
+            targetClass = Class.forName(targetName);
+        } catch (ClassNotFoundException e) {
+            log.error(e.getMessage());
+        }
+        Method[] methods = targetClass.getMethods();
+        String description = "";
+        for (Method method : methods) {
+            if (method.getName().equals(methodName)) {
+                Class[] clazzs = method.getParameterTypes();
+                if (clazzs.length == arguments.length) {
+                    description = method.getAnnotation(SystemControllerLog. class).description();
+                    break;
+                }
+            }
+        }
+        return description;
     }
 }

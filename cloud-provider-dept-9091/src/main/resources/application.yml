@@ -54,6 +54,8 @@ spring:
         stat:
           merge-sql: true
           slow-sql-millis: 5000
+  aop:
+    proxy-target-class: true                                #使用 CGLIB 来实现AOP false:使用的是标准Java的实现。
 
 
 #客户端注册进eureka服务列表内

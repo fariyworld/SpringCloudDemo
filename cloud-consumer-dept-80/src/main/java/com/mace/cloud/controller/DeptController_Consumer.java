@@ -3,6 +3,7 @@ package com.mace.cloud.controller;
 import com.mace.cloud.api.common.RestPackResponse;
 import com.mace.cloud.api.entity.Dept;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
@@ -23,7 +24,7 @@ public class DeptController_Consumer {
     @Autowired
     private RestTemplate restTemplate;
 
-    @RequestMapping(value = "/findAll.do")
+    @GetMapping(value = "/findAll.do")
     public RestPackResponse<List<Dept>> findAll(){
 
         return restTemplate.getForObject(REST_URL_PREFIX + "/dept/findAll.do", RestPackResponse.class);

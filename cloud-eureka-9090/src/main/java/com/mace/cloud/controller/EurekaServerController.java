@@ -1,4 +1,4 @@
-package com.mace.cloud.eureka.controller;
+package com.mace.cloud.controller;
 
 import com.mace.cloud.api.common.RestPackResponse;
 import lombok.extern.slf4j.Slf4j;
