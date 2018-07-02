@@ -22,14 +22,15 @@
         <!-- 统一编译编码 -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <!-- maven编译时的编码 -->
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
         <!-- for maven compiler plugin -->
         <java_source_version>1.8</java_source_version>
+        <!-- maven编译时的编码 -->
         <java_target_version>1.8</java_target_version>
         <file_encoding>UTF-8</file_encoding>
         <!-- Maven plugins -->
         <maven_compiler_version>3.6.0</maven_compiler_version>
+        <maven_resources_plugin_version>3.0.1</maven_resources_plugin_version>
 
         <!-- 版本号控制 -->
         <cloud.version>Dalston.SR1</cloud.version>
@@ -49,6 +50,7 @@
 
     </properties>
 
+
     <dependencyManagement>
         <dependencies>
             <!-- SpringCloud 依赖 -->
@@ -67,12 +69,11 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <!-- lombok 注解 setter-getter 构造器 日志 -->
+            <!-- lombok 依赖  -->
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
-                <version>${lombok.version}</version>
-                <scope>compile</scope>
+                <version>1.16.18</version>
             </dependency>
             <!-- mysql 驱动包 -->
             <dependency>
@@ -80,8 +81,8 @@
                 <artifactId>mysql-connector-java</artifactId>
                 <version>${mysql.connector.java.version}</version>
             </dependency>
-            <!-- druid 数据量连接池 -->
             <dependency>
+                <!-- druid 数据量连接池 -->
                 <groupId>com.alibaba</groupId>
                 <artifactId>druid</artifactId>
                 <version>${druid.pool.version}</version>
@@ -128,11 +129,31 @@
                 <artifactId>commons-lang3</artifactId>
                 <version>${commons.lang3.version}</version>
             </dependency>
+
         </dependencies>
     </dependencyManagement>
 
-
     <build>
+
+        <finalName>SpringCloudDemo</finalName>
+        <resources>
+            <!-- 打包编译项目时 resources目录下的所有文件也编译到 target目录 -->
+            <resource>
+                <directory>src/main/resources</directory>
+                <!-- 资源文件中的占位符是否需要被替换 -->
+                <filtering>true</filtering>
+                <includes>
+                    <include>**/*.*</include>
+                </includes>
+            </resource>
+            <!-- 打包编译项目时 src下的xml也编译到target目录 -->
+            <!--<resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+            </resource>-->
+        </resources>
         <plugins>
             <!-- maven 编译插件 1.8 -->
             <plugin>
@@ -145,25 +166,19 @@
                     <encoding>${maven.compiler.encoding}</encoding>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <configuration>
+                    <delimiters>
+                        <delimit>$</delimit>
+                    </delimiters>
+                </configuration>
+            </plugin>
         </plugins>
-
-        <resources>
-            <!-- 打包编译项目时 src下的xml也编译到target目录 -->
-            <!--<resource>
-                <directory>src/main/java</directory>
-                <includes>
-                    <include>**/*.xml</include>
-                </includes>
-            </resource>-->
-            <!-- 打包编译项目时 resources目录下的所有文件也编译到 target目录 -->
-            <resource>
-                <directory>src/main/resources</directory>
-                <includes>
-                    <include>**/*.*</include>
-                </includes>
-            </resource>
-        </resources>
-
     </build>
+
+
+
 
 </project>

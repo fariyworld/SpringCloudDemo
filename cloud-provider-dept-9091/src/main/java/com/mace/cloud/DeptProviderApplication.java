@@ -5,6 +5,7 @@ import com.terran4j.commons.api2doc.config.EnableApi2Doc;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.web.HttpMessageConverters;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
 
 /**
@@ -14,6 +15,7 @@ import org.springframework.context.annotation.Bean;
  */
 @SpringBootApplication
 @EnableApi2Doc//启用 Api2Doc 服务 http://你的项目地址/api2doc/home.html
+@EnableEurekaClient//本服务启动后会自动注册进eureka服务中
 public class DeptProviderApplication {
 
     public static void main(String[] args) {

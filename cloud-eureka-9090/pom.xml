@@ -12,15 +12,21 @@
     <artifactId>cloud-eureka-9090</artifactId>
     <packaging>jar</packaging>
     <name>${project.artifactId}</name>
-    <description>cloud-eureka子模块：eureka 服务注册中心, 端口: 9090</description>
+    <description>cloud-eureka子模块：eureka 服务注册中心, 管理维护服务, 端口: 9090</description>
 
 
     <dependencies>
-        <!--eureka-server服务端 -->
-        <!--<dependency>-->
-            <!--<groupId>org.springframework.cloud</groupId>-->
-            <!--<artifactId>spring-cloud-starter-eureka-server</artifactId>-->
-        <!--</dependency>-->
+        <!-- 引入自定义的 api 通用包, 即可调用 Dept 部门的实体类 -->
+        <dependency>
+            <groupId>com.mace</groupId>
+            <artifactId>cloud-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- eureka-server服务端 -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-eureka-server</artifactId>
+        </dependency>
         <!-- 热部署 -->
         <dependency>
             <groupId>org.springframework</groupId>

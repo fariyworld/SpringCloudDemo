@@ -1,8 +1,6 @@
 #访问端口
 server:
   port: 9091
-  tomcat:
-    uri-encoding: UTF-8
 
 #mybatis配置
 mybatis:
@@ -56,3 +54,23 @@ spring:
         stat:
           merge-sql: true
           slow-sql-millis: 5000
+
+
+#客户端注册进eureka服务列表内
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:9090/eureka
+  instance:
+    instance-id: cloud-provider-dept:9091         #自定义服务名称
+    prefer-ip-address: true
+security:
+  oauth2:
+    client:
+      additional-information:                       #访问路径可以显示 IP 地址
+
+info:
+  app.name: cloud-provider-dept:9091
+  company.name: www.mace.com
+  build.artifactId: $project.artifactId$
+  build.version: $project.version$

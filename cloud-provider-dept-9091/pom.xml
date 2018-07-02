@@ -21,6 +21,20 @@
             <artifactId>cloud-api</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- 将微服务provider侧注册进eureka -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-eureka</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-config</artifactId>
+        </dependency>
+        <!-- actuator 监控信息完善 ( /info ) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
         <!-- 添加支持全栈式Web开发，包括Tomcat和spring webmvc所需库 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -86,26 +100,5 @@
         </dependency>
 
     </dependencies>
-
-    <build>
-
-        <resources>
-            <!-- 打包编译项目时 src下的xml也编译到target目录 -->
-            <!--<resource>
-                <directory>src/main/java</directory>
-                <includes>
-                    <include>**/*.xml</include>
-                </includes>
-            </resource>-->
-            <!-- 打包编译项目时 resources目录下的所有文件也编译到 target目录 -->
-            <resource>
-                <directory>src/main/resources</directory>
-                <includes>
-                    <include>**/*.*</include>
-                </includes>
-            </resource>
-        </resources>
-    </build>
-
 
 </project>
