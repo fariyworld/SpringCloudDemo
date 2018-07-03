@@ -1,10 +1,12 @@
 package com.mace.cloud;
 
 import com.mace.cloud.api.common.UniversalMenthod;
+import com.mace.cloud.cfgbeans.ConfigBean;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.web.HttpMessageConverters;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.netflix.ribbon.RibbonClient;
 import org.springframework.context.annotation.Bean;
 
 /**
@@ -14,11 +16,12 @@ import org.springframework.context.annotation.Bean;
  */
 @SpringBootApplication
 @EnableDiscoveryClient//向服务中心注册
-public class DeptConsumerApplication {
+@RibbonClient(name= "CLOUD-PROVIDER-DEPT",    configuration = ConfigBean.class)//自定义Ribbon负载均衡
+public class DeptConsumerRibbonApplication {
 
     public static void main(String[] args) {
 
-        SpringApplication.run(DeptConsumerApplication.class, args);
+        SpringApplication.run(DeptConsumerRibbonApplication.class, args);
     }
 
     /**

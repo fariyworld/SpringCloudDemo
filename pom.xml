@@ -9,12 +9,15 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>cloud-api</module>
+        <!-- provider 服务提供 -->
         <module>cloud-provider-dept-9091</module>
+        <module>cloud-provider-dept-9092</module>
+        <!-- consumer 服务消费 -->
         <module>cloud-consumer-dept-80</module>
+        <module>cloud-consumer-dept-ribbon-80</module>
         <!-- eureka 集群 -->
         <module>cloud-eureka-9090</module>
         <module>cloud-eureka-9089</module>
-        <module>cloud-provider-dept-9092</module>
     </modules>
     <packaging>pom</packaging>
 

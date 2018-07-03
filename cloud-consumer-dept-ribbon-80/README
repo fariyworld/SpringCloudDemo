@@ -1,0 +1,122 @@
+1. SpringCloud ribbon 实现负载均衡   主要提供客户侧的软件负载均衡算法
+
+负载均衡就是分发请求流量到不同的服务器，负载均衡分为两种:
+
+    服务端负载：服务器端负载均衡是对客户透明的,用户请求到LB服务器,
+    真正的Application服务器是由LB服务器分发控制的，目前的实现有软件(ngnix,HA Proxy等)和硬件(F5等).
+
+    客户端负载：是客户端软件的一部分,客户端获知到可用的服务器列表按一定的均衡策略,分发请求.
+
+        客户端软负载核心：
+            服务发现，发现依赖服务的列表
+            服务选择规则，在多个服务中如何选择一个有效服务
+            服务监听，检测失效的服务，高效剔除失效服务
+
+Ribbon工作时分两步：
+
+    第一步：选择Eureka Server，它优先选择在同一个Zone且负载较少的Server。
+
+    第二步：根据用户指定的策略，在从Server取到的服务注册列表中选择一个地址，其中Ribbon提供了多种策略，
+           例如轮询round robin、随机Random、根据响应时间加权、断路器(当Hystrix可用时)等等。
+
+负载均衡策略
+
+AbstractLoadBalancerRule：
+    负载均衡策略的抽象类，在该抽象类中定义了负载均衡器ILoadBalancer对象，
+    该对象能够在具体实现选择服务策略时，获取到一些负载均衡器中维护的信息来作为分配依据，
+    并以此设计一些算法来实现针对特定场景的高效策略。
+
+RandomRule：随机策略，从服务实例清单中随机选择一个服务实例。获得可用实例列表upList和所有实例列表allList，
+        并通过rand.nextInt(serverCount)函数来获取一个随机数，并将该随机数作为upList的索引值来返回具体实例。
+
+RoundRobinRule：轮询策略，按照线性轮询的方式依次选择每个服务实例。
+通过AtomicInteger nextServerCyclicCounter对象实现，每次进行实例选择时通过调用incrementAndGetModulo函数实现递增。
+
+RetryRule：重试策略，具备重试机制的实例选择。内部定义了RoundRobinRule，
+并实现了对RoundRobinRule进行反复尝试的策略，若期间能够选择到具体的服务实例就返回，
+若选择不到就根据设置的尝试结束时间为阈值，当超过该阈值后就返回null。
+
+WeightedResponseTimeRule：权重策略，根据实例的运行情况来计算权重，并根据权重来挑选实例，以达到更优的分配效果。
+通过定时任务为每个服务进行权重计算，平均响应时间小的权重区间（总平均响应时间-实例平均响应时间）就大，
+实力选择根据权重范围随机选择，落在哪个区间则选择哪个实例。
+
+BestAvailableRule：最佳策略，通过遍历负载均衡器中维护的所有服务实例，会过滤掉故障的实例，
+并找出并发请求数最小的一个，选出最空闲的实例。
+
+AvailabilityFilteringRule：可用过滤策略：先过滤出故障的或并发请求大于阈值一部分服务实例，
+然后再以线性轮询的方式从过滤后的实例清单中选出一个。
+
+ZoneAvoidanceRule：区域感知策略：使用主过滤条件（区域负载器，选择最优区域）对所有实例过滤并返回过滤后的实例清单，
+依次使用次过滤条件列表中的过滤条件对主过滤条件的结果进行过滤，判断最小过滤数（默认1）和最小过滤百分比（默认0），
+满足条件则使用RoundRobinRule选择实例。
+
+
+与Eureka结合
+当在spring Cloud的应用同时引入Spring cloud Ribbon和Spring Cloud Eureka依赖时，会触发Eureka中实现的对Ribbon的自动化配置。
+这时的serverList的维护机制实现将被com.netflix.niws.loadbalancer.DiscoveryEnabledNIWSServerList的实例所覆盖，
+该实现会讲服务清单列表交给Eureka的服务治理机制来进行维护。IPing的实现将被
+com.netflix.niws.loadbalancer.NIWSDiscoveryPing的实例所覆盖，该实例也将实例接口的任务交给了服务治理框架来进行维护。
+默认情况下，用于获取实例请求的ServerList接口实现将采用Spring Cloud Eureka中封装的
+org.springframework.cloud.netflix.ribbon.eureka.DomainExtractingServerList，其目的是为了让实例维护策略更加通用，
+所以将使用物理元数据来进行负载均衡，而不是使用原生的AWS AMI元数据。
+
+在与Spring cloud Eureka结合使用的时候，不需要再去指定类似的user-service.ribbon.listOfServers的参数来指定具体的服务实例清单，
+因为Eureka将会为我们维护所有服务的实例清单，而对于Ribbon的参数配置，我们依然可以采用之前的两种配置方式来实现。
+
+此外，由于spring Cloud Ribbon默认实现了区域亲和策略，所以，可以通过Eureka实例的元数据配置来实现区域化的实例配置方案。
+比如可以将不同机房的实例配置成不同的区域值，作为跨区域的容器机制实现。而实现也非常简单，
+只需要服务实例的元数据中增加zone参数来指定自己所在的区域，比如：
+
+eureka.instance.metadataMap.zone=shanghai
+
+在Spring Cloud Ribbon与Spring Cloud Eureka结合的工程中，我们可以通过参数禁用Eureka对Ribbon服务实例的维护实现。
+这时又需要自己去维护服务实例列表了。
+
+ribbon.eureka.enabled=false.
+
+
+目前测试的时候发现在服务都成功启动的时候第一次访问会有报错的情况发生,但是之后又恢复正常访问
+
+通过查询相关文档,了解到要解决此问题那么让需要实例化的类提前创建，而不是在第一次调用的时候创建
+
+主要是Ribbon进行客户端负载均衡的Client并不是在服务启动的时候就初始化好的，而是在调用的时候才会去创建相应的Client，
+所以第一次调用的耗时不仅仅包含发送HTTP请求的时间，还包含了创建RibbonClient的时间，这样一来如果创建时间速度较慢，
+同时设置的超时时间又比较短的话，很容易就会出现上面所描述的显现。
+
+因此我们可以通过设置:
+
+ribbon.eager-load.enabled=true
+
+ribbon.eager-load.clients=cloud-shop-userservice
+
+参数说明:
+
+ribbon.eager-load.enabled : 开启Ribbon的饥饿加载模式
+
+ribbon.eager-load.clients: 指定需要饥饿加载的服务名
+
+
+1.1添加依赖 其实 eureka 中已包含 ribbon  (默认策略：区域感知策略)  不与 eureka 集成时 需要我们自行维护 ribbno策略 默认轮询
+
+    <!-- 向 eureka 注册自己 -->
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-eureka</artifactId>
+    </dependency>
+    <!-- ribbon 实现负载均衡客户端 -->
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-ribbon</artifactId>
+    </dependency>
+
+1.2 通过注解实例化RestTemplate ，并添加LoadBalanced 注：如果使用了 其他序列化工具。在 restTemplate 中替换（index：0）或者移除
+
+    @Bean
+    @LoadBalanced
+    RestTemplate restTemplate() {
+    return new RestTemplate();
+    }
+
+1.3 SpringBoot应用启动类 添加注解
+
+@EnableDiscoveryClient//向服务中心注册

@@ -7,6 +7,7 @@ import com.mace.cloud.service.IDeptService;
 import com.terran4j.commons.api2doc.annotations.Api2Doc;
 import com.terran4j.commons.api2doc.annotations.ApiComment;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,6 +29,9 @@ public class DeptController {
     @Autowired
     private IDeptService iDeptService;
 
+    @Value("${server.port}")
+    String port;
+
     @SystemControllerLog(description = "查询所有部门信息")
     @ApiComment(value = "查询所有部门信息")
     @RequestMapping(value = "/findAll.do", name = "查询所有部门信息", method = RequestMethod.GET)
@@ -35,7 +39,7 @@ public class DeptController {
 
         List<Dept> deptList = iDeptService.findAll();
 
-        return RestPackResponse.createBySuccess("查询部门信息成功", deptList);
+        return RestPackResponse.createBySuccess("查询部门信息成功 : " + port, deptList);
     }
 
 }

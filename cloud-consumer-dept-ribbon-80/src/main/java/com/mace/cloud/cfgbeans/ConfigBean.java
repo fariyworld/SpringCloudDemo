@@ -1,22 +1,17 @@
 package com.mace.cloud.cfgbeans;
 
 import com.mace.cloud.api.common.UniversalMenthod;
+import com.netflix.loadbalancer.IRule;
+import com.netflix.loadbalancer.RoundRobinRule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.http.converter.json.GsonHttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
-
-import java.nio.charset.Charset;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * description:
@@ -44,6 +39,7 @@ public class ConfigBean {
      */
     @Bean
     @ConditionalOnMissingBean({RestTemplate.class})
+    @LoadBalanced//注解表明这个 restRemplate 开启负载均衡的功能
     public RestTemplate restTemplate(ClientHttpRequestFactory factory){
 
         return UniversalMenthod.restTemplate(factory);
@@ -57,5 +53,20 @@ public class ConfigBean {
         factory.setConnectTimeout(1*1000*60);
         factory.setReadTimeout(1*1000*60);
         return factory;
+    }
+
+    /**
+     * description: ribbno 负载均衡策略
+     * <br /><br />
+     * create by mace on 2018/7/3 16:59.
+     * @param
+     * @return: com.netflix.loadbalancer.IRule
+     */
+    @Bean
+    public IRule myRule()
+    {
+        return new RoundRobinRule();//轮询
+//        return new RandomRule();//达到的目的，用我们重新选择的随机算法替代默认的轮询。
+//        return new RetryRule();//重试策略
     }
 }

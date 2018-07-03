@@ -26,7 +26,7 @@ jasypt:
 spring:
 #  应用名（一定要配）
   application:
-    name: cloud-provider-dept-9091
+    name: cloud-provider-dept
 #  数据源
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource            #数据库连接池类型 druid
@@ -65,7 +65,7 @@ eureka:
 #      defaultZone: http://127.0.0.1:9090/eureka                                      # 单机
       defaultZone: http://eureka01.com:9089/eureka/,http://eureka02.com:9090/eureka/  # 集群
   instance:
-    instance-id: cloud-provider-dept:9091         #自定义服务名称
+    instance-id: cloud-provider-dept:9091           #自定义服务名称
     prefer-ip-address: true
 security:
   oauth2:
@@ -73,7 +73,7 @@ security:
       additional-information:                       #访问路径可以显示 IP 地址
 
 info:
-  app.name: cloud-provider-dept:9091
+  app.name: $project.artifactId$
   company.name: www.mace.com
   build.artifactId: $project.artifactId$
   build.version: $project.version$
