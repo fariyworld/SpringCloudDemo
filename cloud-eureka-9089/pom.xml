@@ -9,11 +9,12 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>cloud-consumer-dept-80</artifactId>
+    <artifactId>cloud-eureka-9089</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>${project.artifactId}</name>
-    <description>cloud-consumer-dept-80子模块：消费 dept 服务, 端口: 80</description>
+    <description>cloud-eureka子模块：eureka 服务注册中心 集群 - 01, 管理维护服务, 端口: 9089</description>
+
 
     <dependencies>
         <!-- 引入自定义的 api 通用包, 即可调用 Dept 部门的实体类 -->
@@ -22,10 +23,10 @@
             <artifactId>cloud-api</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <!-- 添加支持全栈式Web开发，包括Tomcat和spring webmvc所需库 -->
+        <!-- eureka-server服务端 -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-eureka-server</artifactId>
         </dependency>
         <!-- 热部署 -->
         <dependency>

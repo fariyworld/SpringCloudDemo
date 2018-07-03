@@ -9,11 +9,11 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>cloud-provider-dept-9091</artifactId>
+    <artifactId>cloud-provider-dept-9092</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>${project.artifactId}</name>
-    <description>cloud-provider-dept-9091子模块：提供 dept 服务 01, 端口: 9091</description>
+    <description>cloud-provider-dept-9092子模块：提供 dept 服务 02, 端口: 9092</description>
 
     <dependencies>
         <!-- 引入自定义的 api 通用包, 即可调用 Dept 部门的实体类 -->
@@ -59,8 +59,8 @@
         </dependency>
         <!-- jetty 服务器 -->
         <!--<dependency>-->
-            <!--<groupId>org.springframework.boot</groupId>-->
-            <!--<artifactId>spring-boot-starter-jetty</artifactId>-->
+        <!--<groupId>org.springframework.boot</groupId>-->
+        <!--<artifactId>spring-boot-starter-jetty</artifactId>-->
         <!--</dependency>-->
         <!-- junit 单元测试依赖-->
         <dependency>
@@ -88,7 +88,7 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
         </dependency>
-         <!--配置文件密码加密-->
+        <!--配置文件密码加密-->
         <dependency>
             <groupId>com.github.ulisesbocchio</groupId>
             <artifactId>jasypt-spring-boot-starter</artifactId>

@@ -11,7 +11,10 @@
         <module>cloud-api</module>
         <module>cloud-provider-dept-9091</module>
         <module>cloud-consumer-dept-80</module>
+        <!-- eureka 集群 -->
         <module>cloud-eureka-9090</module>
+        <module>cloud-eureka-9089</module>
+        <module>cloud-provider-dept-9092</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -129,7 +132,6 @@
                 <artifactId>commons-lang3</artifactId>
                 <version>${commons.lang3.version}</version>
             </dependency>
-
         </dependencies>
     </dependencyManagement>
 

@@ -3,4 +3,7 @@ server:
 
 spring:
   aop:
-    proxy-target-class: true      #使用 CGLIB 来实现AOP false:使用的是标准Java的实现。
+    proxy-target-class: true              #使用 CGLIB 来实现AOP false:使用的是标准Java的实现。
+
+
+

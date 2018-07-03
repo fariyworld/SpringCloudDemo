@@ -1,6 +1,6 @@
 #访问端口
 server:
-  port: 9091
+  port: 9092
 
 #mybatis配置
 mybatis:
@@ -26,17 +26,17 @@ jasypt:
 spring:
 #  应用名（一定要配）
   application:
-    name: cloud-provider-dept-9091
+    name: cloud-provider-dept-9092
 #  数据源
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource            #数据库连接池类型 druid
     driver-class-name: com.mysql.jdbc.Driver                #mysql 驱动包
-    url: jdbc:mysql://192.168.88.132:3306/cloudDB01         #数据库名称
+    url: jdbc:mysql://192.168.88.132:3306/cloudDB02         #数据库名称
     username: root                                          #用户名
     password: ENC(Qml0BS/5j8LD9dyKa+Eo/Y4DhmGofWLQ)         #密码（采用 jasypt 加密配置密码 ）
 #    druid连接池配置
     druid:
-      name: DruidDataSource-cloudDB01-Dept                  #druid 数据源监控名
+      name: DruidDataSource-cloudDB02-Dept                  #druid 数据源监控名
       async-init: true                                      #异步初始化连接池
       async-close-connection-enable: true                   #异步关闭连接
       initial-size: 1                                       #初始化时建立物理连接的个数。初始化发生在显示调用init方法，或者第一次getConnection时
@@ -65,7 +65,7 @@ eureka:
 #      defaultZone: http://127.0.0.1:9090/eureka                                      # 单机
       defaultZone: http://eureka01.com:9089/eureka/,http://eureka02.com:9090/eureka/  # 集群
   instance:
-    instance-id: cloud-provider-dept:9091         #自定义服务名称
+    instance-id: cloud-provider-dept:9092         #自定义服务名称
     prefer-ip-address: true
 security:
   oauth2:
@@ -73,7 +73,7 @@ security:
       additional-information:                       #访问路径可以显示 IP 地址
 
 info:
-  app.name: cloud-provider-dept:9091
+  app.name: cloud-provider-dept:9092
   company.name: www.mace.com
   build.artifactId: $project.artifactId$
   build.version: $project.version$

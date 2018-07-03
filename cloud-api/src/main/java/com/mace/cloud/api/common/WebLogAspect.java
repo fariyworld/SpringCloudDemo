@@ -48,9 +48,10 @@ public class WebLogAspect {
     public void pt() {
     }
 
-    //execution(* com.mace.cloud.*.controller..*.*(..))
-    //execution(public * com.mace.cloud.controller..*.*(..))
-    //Controller层切点 注解 @annotation(com.mace.cloud.api.annotation.SystemControllerLog)
+    //execution(* com.mace.cloud.controller..*.*(..))         controller 包及子包下的所有方法
+    //execution(public * com.mace.cloud.controller..*.*(..))  public 修饰的 controller 包及子包下的所有方法
+    //execution(public * com.mace.cloud..*Controller*.*(..))  包含 Controller 串的类
+    //带有 @SystemControllerLog 注解的方法 @annotation(com.mace.cloud.api.annotation.SystemControllerLog)
 
     //前置通知
     @Before(value = "pt()")
@@ -73,7 +74,7 @@ public class WebLogAspect {
         username = username.equals("") ? "<>" : username;
 
         log.info("=========================请求 start======================================");
-        log.info("requestId : " + requestId);
+        log.info("requestId : " + requestId.get());
         log.info("请求人 : " + username);
         log.info("IP : " + getClientIp(request));
         log.info("URL : "+ getRequestUrl(request));
@@ -140,7 +141,7 @@ public class WebLogAspect {
 //        request.setAttribute("END_TIME", END_TIME);
 
         log.error("异常信息: {}",ex.getMessage());
-        log.error("异常堆栈: {}",ex.getStackTrace());
+        log.error("异常堆栈: {}",ex.getStackTrace()[0]);
         log.info("=========================请求 异常 end======================================");
     }
 
@@ -248,18 +249,24 @@ public class WebLogAspect {
         }
 
         // 类上的注解
-        SystemControllerLog annotation = (SystemControllerLog) targetClass.getAnnotation(SystemControllerLog.class);
-        description = annotation.description() + "-";
+        if( targetClass.isAnnotationPresent(SystemControllerLog.class) ){
+            SystemControllerLog annotation = (SystemControllerLog) targetClass.getAnnotation(SystemControllerLog.class);
+            description = annotation.description() + "-";
+        }
 
         // 方法上的注解
         Method[] methods = targetClass.getMethods();
         for (Method method : methods) {
             if (method.getName().equals(methodName)) {
-                Class[] clazzs = method.getParameterTypes();
-                if (clazzs.length == arguments.length) {
-                    description += method.getAnnotation(SystemControllerLog. class).description();
-                    break;
+                if(method.isAnnotationPresent(SystemControllerLog.class)){
+                    int parameterCount = method.getParameterCount();// 参数个数 2
+//                    Class[] clazzs = method.getParameterTypes();  // clazzs.length
+                    if (parameterCount == arguments.length) {
+                        description += method.getAnnotation(SystemControllerLog.class).description();
+                        break;
+                    }
                 }
+                break;
             }
         }
         return description;

@@ -10,9 +10,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>cloud-eureka-9090</artifactId>
+    <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>${project.artifactId}</name>
-    <description>cloud-eureka子模块：eureka 服务注册中心, 管理维护服务, 端口: 9090</description>
+    <description>cloud-eureka子模块：eureka 服务注册中心 集群 - 02, 管理维护服务, 端口: 9090</description>
 
 
     <dependencies>

@@ -11,16 +11,16 @@ import org.springframework.context.annotation.Bean;
 /**
  * description:
  * <br />
- * Created by mace on 9:45 2018/7/1.
+ * Created by mace on 10:16 2018/7/3.
  */
 @SpringBootApplication
-@EnableEurekaServer// 开启 eureka-server 服务中心 (http://127.0.0.1:9090/), 接受其他微服务注册进来
+@EnableEurekaServer// 开启 eureka-server 服务中心 集群 - 02 (http://127.0.0.1:9090/), 接受其他微服务注册进来
 @EnableDiscoveryClient// 开启服务发现
-public class EurekaServerApplication {
+public class EurekaServer_9090_Application {
 
     public static void main(String[] args) {
 
-        SpringApplication.run(EurekaServerApplication.class,args);
+        SpringApplication.run(EurekaServer_9090_Application.class,args);
     }
 
     @Bean
