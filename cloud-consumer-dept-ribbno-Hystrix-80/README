@@ -1,0 +1,31 @@
+springcloud 中使用eureka/ribbon/Hystrix负载均衡及断路器
+
+断路器相当于家里的空气跳闸，当某个应用实例挂了，它调用的以及掉用它的应用都会请求或者返回失败，这时如果不及时处理，大量的请求依旧在访问，
+会引起其他的正常的应用也挂了，最终导致雪崩，断路器会在每个请求的数量达到一定的阈值，会切断这个请求，返回预定的值，
+这样在修复前不会引起其他的应用的失效，最大程度控制整个项目，断路器有3个状态，打开，关闭，半开，当有应用挂了，请求在继续时，断路器打开；
+
+当应用正常运行时，断路器关闭；
+
+断路器在打开后，会切断某个请求，但是过一定时间，它会猜测这个应用是否已经修复了，它会将请求分流，即它收到10个请求，
+它拿2个请求继续正常访问请求，来看看是否修复，其余8个依旧返回预定值，这就是半打开状态。
+
+1.pom.xml
+
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-hystrix</artifactId>
+    </dependency>
+
+2. 启动类
+
+    @EnableCircuitBreaker            //增加的断路器注解
+
+3.控制器类方法添加注解
+
+    @HystrixCommand(fallbackMethod = "findAllServiceFallback")
+
+    public RestPackResponse<List<Dept>> findAllServiceFallback() {
+
+        return RestPackResponse.createByError("失败", "客户端关闭", null );
+    }
+
