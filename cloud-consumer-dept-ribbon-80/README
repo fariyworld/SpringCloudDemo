@@ -120,3 +120,20 @@ ribbon.eager-load.clients: 指定需要饥饿加载的服务名
 1.3 SpringBoot应用启动类 添加注解
 
 @EnableDiscoveryClient//向服务中心注册
+
+
+1.4 自定义负载均衡策略
+
+    配置类
+
+    @Bean
+    public IRule myRule()
+    {
+        return new RoundRobinRule();//轮询
+//        return new RandomRule();//达到的目的，用我们重新选择的随机算法替代默认的轮询。
+//        return new RetryRule();//重试策略
+    }
+
+SpringBoot应用启动类 添加注解
+
+    @RibbonClient(name= "CLOUD-PROVIDER-DEPT",    configuration = ConfigBean.class)//自定义Ribbon负载均衡

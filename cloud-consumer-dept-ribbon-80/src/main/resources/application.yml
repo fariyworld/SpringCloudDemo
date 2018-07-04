@@ -6,6 +6,11 @@ spring:
     proxy-target-class: true                      #使用 CGLIB 来实现AOP false:使用的是标准Java的实现。
   application:
     name: cloud-consumer-dept-ribbon-80
+  cloud:
+    loadbalancer:
+      retry:
+        enabled: true                             #重试机制开关,默认false
+
 #客户端注册进eureka服务列表内
 eureka:
   client:
@@ -30,3 +35,7 @@ ribbon:
   eager-load:
     enabled: true                                   #开启Ribbon的饥饿加载模式
     clients: cloud-provider-dept                    #指定需要饥饿加载的服务名
+#Ribbon 超时时间设置
+#ribbon:
+#  ConnectTimeout: 500                              #http建立socket超时时间,毫秒
+#  ReadTimeout:  3000                               #http读取响应socket超时时间

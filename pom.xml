@@ -18,6 +18,7 @@
         <!-- eureka 集群 -->
         <module>cloud-eureka-9090</module>
         <module>cloud-eureka-9089</module>
+        <module>cloud-consumer-dept-feign-80</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -180,6 +181,7 @@
                     </delimiters>
                 </configuration>
             </plugin>
+
         </plugins>
     </build>
 
