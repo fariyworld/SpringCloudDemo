@@ -2,11 +2,12 @@ package com.mace.cloud.controller;
 
 import com.mace.cloud.api.common.RestPackResponse;
 import com.mace.cloud.api.entity.Dept;
-import com.mace.cloud.service.IDeptService_mvc;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -20,18 +21,23 @@ import java.util.List;
 public class DeptController_Consumer {
 
 //    private static final String REST_URL_PREFIX = "http://127.0.0.1:9091";
+//    在ribbon中它会根据服务名来选择具体的服务实例，根据服务实例在请求的时候会用具体的url替换掉服务名（大写）
+    private static final String REST_SERVICE = "http://CLOUD-PROVIDER-DEPT";
 
     @Autowired
-    private IDeptService_mvc iDeptService_mvc;
-//    private IDeptService iDeptService;
-//    private RestTemplate restTemplate;
+    private RestTemplate restTemplate;
 
+    @HystrixCommand(fallbackMethod = "findAllServiceFallback")
     @GetMapping(value = "/findAll.do")
     public RestPackResponse<List<Dept>> findAll(){
 
-//        return restTemplate.getForObject(REST_URL_PREFIX + "/dept/findAll.do", RestPackResponse.class);
-//        return iDeptService.findAll();
-        return iDeptService_mvc.findAll();
+        return restTemplate.getForObject(REST_SERVICE + "/dept/findAll.do", RestPackResponse.class);
+    }
+
+
+    public RestPackResponse<List<Dept>> findAllServiceFallback() {
+
+        return RestPackResponse.createByError("失败", "客户端关闭", null );
     }
 
 }

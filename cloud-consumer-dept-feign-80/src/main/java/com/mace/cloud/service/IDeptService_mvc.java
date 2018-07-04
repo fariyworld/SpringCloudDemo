@@ -13,7 +13,7 @@ import java.util.List;
  * Created by mace on 14:06 2018/7/4.
  */
 @FeignClient(value = "cloud-provider-dept")
-public interface IDeptService_MVC {
+public interface IDeptService_mvc {
 
     @GetMapping(value = "/dept/findAll.do")
     RestPackResponse<List<Dept>> findAll();

@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
  * <br />
  * Created by mace on 13:52 2018/7/4.
  */
-@Configuration
+//@Configuration
 public class FooConfiguration {
 
     //使用Feign自己的注解，使用springmvc的注解就会报错

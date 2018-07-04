@@ -19,6 +19,7 @@
         <module>cloud-eureka-9090</module>
         <module>cloud-eureka-9089</module>
         <module>cloud-consumer-dept-feign-80</module>
+        <module>cloud-consumer-dept-ribbno-Hystrix-80</module>
     </modules>
     <packaging>pom</packaging>
 

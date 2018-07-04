@@ -40,3 +40,14 @@ public class FooConfiguration {
         return new feign.Contract.Default();
     }
 }
+
+
+5.使用 springmvc 注解
+@FeignClient(value = "cloud-provider-dept")
+public interface IDeptService_mvc {
+
+    @GetMapping(value = "/dept/findAll.do")
+    RestPackResponse<List<Dept>> findAll();
+}
+注释掉关于FooConfiguration的类
+//@Configuration

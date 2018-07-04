@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Bean;
  */
 @SpringBootApplication
 @EnableEurekaServer// 开启 eureka-server 服务中心 集群 - 02 (http://127.0.0.1:9090/), 接受其他微服务注册进来
-@EnableDiscoveryClient// 开启服务发现
+//@EnableDiscoveryClient//开启服务发现
 public class EurekaServer_9090_Application {
 
     public static void main(String[] args) {

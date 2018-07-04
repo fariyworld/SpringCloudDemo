@@ -9,6 +9,7 @@
         <module name="cloud-api" />
         <module name="cloud-consumer-dept-80" />
         <module name="cloud-consumer-dept-feign-80" />
+        <module name="cloud-consumer-dept-ribbno-Hystrix-80" />
         <module name="cloud-consumer-dept-ribbon-80" />
         <module name="cloud-eureka-9089" />
         <module name="cloud-eureka-9090" />
