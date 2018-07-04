@@ -1,0 +1,42 @@
+1. 集成 feign
+
+    <!-- 向 eureka 注册自己 -->
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-eureka</artifactId>
+    </dependency>
+    <!-- feign -->
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-starter-feign</artifactId>
+    </dependency>
+
+
+2. main
+
+@EnableDiscoveryClient//向服务中心注册
+@EnableFeignClients//开启 Feign Web客户端
+
+
+3. service
+
+@FeignClient(value = "cloud-provider-dept",configuration = FooConfiguration.class)
+public interface IDeptService {
+
+
+    @RequestLine("GET /dept/findAll.do")
+    RestPackResponse<List<Dept>> findAll();
+}
+
+4.configuration
+
+@Configuration
+public class FooConfiguration {
+
+    //使用Feign自己的注解，使用springmvc的注解就会报错
+    @Bean
+    public Contract feignContract() {
+
+        return new feign.Contract.Default();
+    }
+}

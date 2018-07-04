@@ -140,8 +140,6 @@
     </dependencyManagement>
 
     <build>
-
-        <finalName>SpringCloudDemo</finalName>
         <resources>
             <!-- 打包编译项目时 resources目录下的所有文件也编译到 target目录 -->
             <resource>
