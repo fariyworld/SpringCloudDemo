@@ -18,6 +18,12 @@ public class AccessFilter extends ZuulFilter {
 
     /**
      * description: 过滤器的类型，它决定过滤器在请求的哪个生命周期中执行。这里定义为pre,代表会在请求被路由之前执行
+     *
+     *      per：路由之前，如实现认证、记录调试信息等
+     *      routing：路由时
+     *      post：路由后，比如添加HTTP Header
+     *      error：发生错误时调用
+     *
      * <br /><br />
      * create by mace on 2018/7/4 16:39.
      * @param
@@ -78,13 +84,20 @@ public class AccessFilter extends ZuulFilter {
             log.warn("accessToken is empty");
             ctx.setSendZuulResponse(false);
             ctx.setResponseStatusCode(401);
+            ctx.set("isSuccess", false);
             try {
-                ctx.getResponse().getWriter().write("accessToken is empty");
+                ctx.getResponse().getWriter().write("{\"result\":\"accessToken is empty\"}");
             } catch (Exception e) {
+
             }
             return null;
+        }else{
+            ctx.setSendZuulResponse(true);// 对该请求进行路由
+            ctx.setResponseStatusCode(200);
+            ctx.set("isSuccess", true);// 设值，可以在多个过滤器时使用
+            log.info("access is ok");
+            return null;
         }
-        log.info("access is ok");
-        return null;
+
     }
 }

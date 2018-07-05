@@ -17,7 +17,7 @@
 			SpringCloud-provider-Dept-9091
 	-->
     <contextName>${project.artifactId}</contextName>
-    <property name="LOG_PATH" value="D:\\WebLogs\\SpringCloud-Zuul-9099"/>
+    <property name="LOG_PATH" value="D:\\WebLogs\\SpringCloud-oauth2-9096"/>
     <!--<property name="LOG_PATH" value="logs"></property>-->
     <!-- 日志记录器，FILE_ERROR -->
     <appender name="FILE_ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -141,11 +141,9 @@
     </appender>
 
     <logger name="org.springframework.data" level="DEBUG"></logger>
-    <!-- level:TRACE  sql追踪 -->
-    <logger name="com.mace.cloud.dao" level="DEBUG"></logger>
 
-    <!-- zuul 日志 -->
-    <logger name="com.netflix" level="DEBUG"></logger>
+    <!-- security 日志 -->
+    <logger name="org.springframework.security" level="DEBUG"></logger>
 
     <!-- 生产环境下，将此级别配置为适合的级别，以免日志文件太多或影响程序性能 -->
     <root level="INFO">

@@ -2,6 +2,7 @@ package com.mace.cloud.zuul;
 
 import com.mace.cloud.api.common.UniversalMenthod;
 import com.mace.cloud.zuul.config.AccessFilter;
+import com.mace.cloud.zuul.config.GatewayZuulFallback;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.web.HttpMessageConverters;
@@ -36,5 +37,12 @@ public class SpringCloudZuulApplication {
     public AccessFilter accessFilter() {
 
         return new AccessFilter();
+    }
+
+
+    @Bean
+    public GatewayZuulFallback zuulFallback() {
+
+        return new GatewayZuulFallback();
     }
 }

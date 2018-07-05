@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<head>
+    <title>Hello World!</title>
+
+    <script type="text/javascript" th:src="@{/js/jquery-3.2.1.min.js}"></script>
+
+    <script>
+        $(function () {
+            alert("hello js");
+        });
+    </script>
+</head>
+
+<body>
+    <h1>Hello world!</h1>
+    <h1 th:inline="text">Hello Thymeleaf</h1>
+</body>
+</html>

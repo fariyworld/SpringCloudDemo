@@ -13,6 +13,7 @@
         <module name="cloud-consumer-dept-ribbon-80" />
         <module name="cloud-eureka-9089" />
         <module name="cloud-eureka-9090" />
+        <module name="cloud-oauth2-9096" />
         <module name="cloud-provider-dept-9091" />
         <module name="cloud-provider-dept-9092" />
         <module name="cloud-zuul-gateway-9099" />
