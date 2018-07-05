@@ -3,7 +3,7 @@
 
 2.common-module 公共模块 提供 JavaBean、接口、AOP 日志统一处理、工具包、RestPack 封装响应对象、响应码、统一异常处理
 
-3.zuul-module 服务网关（swagger api统一接口）
+3.zuul-module 服务网关（swagger api统一接口）提供动态路由，监控，弹性，安全等的边缘服务。Zuul是Netflix出品的一个基于JVM路由和服务端的负载均衡器
 
 4.eureka-module 服务注册与发现（集群）
 
@@ -13,6 +13,6 @@
 
 7.oauth2 授权认证中心
 
-8.hystrix 容错限流
+8.hystrix 容错限流（在 ribbno项目的基础上）处理服务的熔断防止故障扩散
 
 9.apollo 统一配置中心

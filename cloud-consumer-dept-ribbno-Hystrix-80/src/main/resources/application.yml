@@ -37,5 +37,6 @@ ribbon:
     clients: cloud-provider-dept                    #指定需要饥饿加载的服务名
 #Ribbon 超时时间设置
 #ribbon:
-#  ConnectTimeout: 500                              #http建立socket超时时间,毫秒
-#  ReadTimeout:  3000                               #http读取响应socket超时时间
+#  ConnectTimeout: 60000                             #http建立socket超时时间,毫秒
+#  ReadTimeout:  60000                               #http读取响应socket超时时间
+
